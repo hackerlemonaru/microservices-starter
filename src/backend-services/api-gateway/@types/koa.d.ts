@@ -19,3 +19,28 @@ declare module 'koa' {
     registeredAt: Date;
   }
 
+  export interface AppKoaState {
+    config: Config;
+    startTime: number;
+    logger: Logger;
+    validatedRequest: ValidateResult<any>;
+    requestId: string;
+    version: Version;
+    token?: string;
+    refreshToken?: string;
+    user: User;
+    refreshTokenExpiresAt?: Date;
+  }
+
+  export interface AppKoaContext {
+    oauth: OAuth2Server;
+  }
+
+  export type AppMiddleware = Middleware<AppKoaState, AppKoaContext>;
+
+  export type AppContext = ParameterizedContext<AppKoaState, AppKoaContext>;
+
+  export type RouterAppMiddleware = RouterMiddleware<AppKoaState, AppKoaContext>;
+
+  export type RouterAppContext = RouterContext<AppKoaState, AppKoaContext>;
+}
