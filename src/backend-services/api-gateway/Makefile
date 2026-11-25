@@ -14,3 +14,24 @@ dev:
 		--legacy-watch \
 		-- \
 			--inspect=$(NODE_INSPECTOR_HOST):$(NODE_INSPECTOR_PORT) \
+			--require ts-node/register \
+		-- src/boot.ts
+
+# -------------------------------------
+# validation targets
+# -------------------------------------
+.PHONY: lint-code
+lint-code:
+	$(if $(NO_CACHE), rm -f .eslintcache;) \
+	npx eslint \
+		--cache \
+		--report-unused-disable-directives \
+		$(if $(FIX),--fix) \
+		"$(PWD)/**/*.{ts,tsx}"
+
+.PHONY: lint
+lint: lint-code
+
+.PHONY: compile-dry
+compile-dry:
+	npx tsc -p tsconfig.json --noEmit
