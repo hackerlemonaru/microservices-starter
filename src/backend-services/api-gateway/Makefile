@@ -35,3 +35,27 @@ lint: lint-code
 .PHONY: compile-dry
 compile-dry:
 	npx tsc -p tsconfig.json --noEmit
+
+.PHONY: run-test
+run-test: run-test-unit
+
+.PHONY: run-test-unit
+run-test-unit:
+	npx jest --config=jest-unit.config.json --passWithNoTests
+
+.PHONY: validate
+validate: lint compile-dry run-test
+
+# -------------------------------------
+# release targets
+# -------------------------------------
+.PHONY: build
+build: build-server build-client
+
+.PHONY: build-server
+build-server:
+	npx tsc -p ./src/server/tsconfig.server.production.json
+
+.PHONY: build-client
+build-client:
+	NODE_ENV=production npx webpack
